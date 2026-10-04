@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>NOVA Casino — Demo</title>
+<style>
+  :root{--bg:#080a10;--panel:#111622;--panel2:#171c29;--text:#f5f7fb;--muted:#9ca5b7;--accent:#7c5cff;--accent2:#20d6b5;--danger:#ff5571;--line:#252c3c;}
+  *{box-sizing:border-box} body{margin:0;font-family:Inter,Arial,sans-serif;background:radial-gradient(circle at top,#16132b 0,#080a10 42%);color:var(--text);min-height:100vh}
+  header{height:72px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 28px;background:rgba(8,10,16,.84);backdrop-filter:blur(12px);position:sticky;top:0;z-index:5}
+  .brand{font-weight:900;letter-spacing:.8px;font-size:21px}.brand span{color:var(--accent)}
+  .balance{background:var(--panel);border:1px solid var(--line);padding:10px 15px;border-radius:13px;font-weight:800}.balance small{color:var(--muted);font-weight:600;margin-right:8px}
+  main{max-width:1100px;margin:30px auto;padding:0 18px}.hero{display:flex;justify-content:space-between;gap:20px;align-items:end;margin-bottom:22px}.hero h1{font-size:42px;margin:0 0 7px}.hero p{margin:0;color:var(--muted);max-width:650px;line-height:1.5}.demo{padding:9px 13px;border-radius:12px;background:#211d3b;border:1px solid #3c356d;color:#c9c2ff;font-weight:800;font-size:12px;white-space:nowrap}
+  .tabs{display:flex;gap:9px;margin-bottom:16px}.tab{border:1px solid var(--line);background:var(--panel);color:var(--muted);padding:11px 15px;border-radius:11px;cursor:pointer;font-weight:800}.tab.active{background:var(--accent);border-color:var(--accent);color:#fff}
+  .grid{display:grid;grid-template-columns:1.55fr .95fr;gap:16px}.card{background:linear-gradient(180deg,#131826,#0f141e);border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:0 14px 40px rgba(0,0,0,.22)}
+  .game-title{font-size:18px;font-weight:900}.sub{color:var(--muted);font-size:13px}.wheel-wrap{display:flex;justify-content:center;align-items:center;padding:28px 10px}.wheel{width:250px;height:250px;border-radius:50%;border:12px solid #30374a;position:relative;display:flex;align-items:center;justify-content:center;background:conic-gradient(#1f222d 0deg 9.73deg,#c7354d 9.73deg 19.46deg,#151821 19.46deg 29.19deg,#c7354d 29.19deg 38.92deg,#151821 38.92deg 48.65deg,#c7354d 48.65deg 58.38deg,#151821 58.38deg 68.11deg,#c7354d 68.11deg 77.84deg,#151821 77.84deg 87.57deg,#c7354d 87.57deg 97.3deg,#151821 97.3deg 107.03deg,#c7354d 107.03deg 116.76deg,#151821 116.76deg 126.49deg,#c7354d 126.49deg 136.22deg,#151821 136.22deg 145.95deg,#c7354d 145.95deg 155.68deg,#151821 155.68deg 165.41deg,#c7354d 165.41deg 175.14deg,#151821 175.14deg 184.87deg,#c7354d 184.87deg 194.6deg,#151821 194.6deg 204.33deg,#c7354d 204.33deg 214.06deg,#151821 214.06deg 223.79deg,#c7354d 223.79deg 233.52deg,#151821 233.52deg 243.25deg,#c7354d 243.25deg 252.98deg,#151821 252.98deg 262.71deg,#c7354d 262.71deg 272.44deg,#151821 272.44deg 282.17deg,#c7354d 282.17deg 291.9deg,#151821 291.9deg 301.63deg,#c7354d 301.63deg 311.36deg,#151821 311.36deg 321.09deg,#c7354d 321.09deg 330.82deg,#151821 330.82deg 340.55deg,#c7354d 340.55deg 350.28deg,#1f222d 350.28deg 360deg);box-shadow:inset 0 0 35px rgba(0,0,0,.48),0 15px 35px rgba(0,0,0,.35)}
+  .wheel:before{content:'NOVA';width:98px;height:98px;border-radius:50%;background:#0b0e15;border:6px solid #3d455b;display:flex;align-items:center;justify-content:center;font-weight:900;letter-spacing:1px;color:#f0edff}.pointer{position:absolute;top:-25px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:12px solid transparent;border-right:12px solid transparent;border-top:25px solid #fff;filter:drop-shadow(0 3px 4px #000)}
+  .controls{display:grid;gap:12px}.row{display:flex;gap:9px;align-items:center}.input{width:100%;background:#0b0e15;border:1px solid var(--line);color:var(--text);padding:12px 13px;border-radius:11px;outline:none}.btn{border:0;border-radius:11px;padding:12px 15px;font-weight:900;cursor:pointer}.btn-primary{background:var(--accent);color:white}.btn-green{background:var(--accent2);color:#07110f}.btn-danger{background:var(--danger);color:white}.btn-secondary{background:#202637;color:white;border:1px solid #2e374b}
+  .choices{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.choice{padding:11px 9px;text-align:center;border:1px solid var(--line);background:#0c1018;border-radius:10px;cursor:pointer;font-weight:800}.choice.active{outline:2px solid var(--accent);background:#19152d}
+  .result{min-height:50px;display:flex;align-items:center;justify-content:center;border:1px dashed #333c50;border-radius:12px;margin-top:8px;color:#dfe5f1;font-weight:900}.big{font-size:30px}.hidden{display:none}
+  .crash-box{height:280px;border-radius:15px;background:linear-gradient(180deg,rgba(124,92,255,.17),rgba(32,214,181,.03));border:1px solid var(--line);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}.mult{font-size:70px;font-weight:1000}.status{position:absolute;top:13px;left:13px;padding:7px 10px;border-radius:9px;background:#0b0e15aa;border:1px solid var(--line);font-size:12px;font-weight:900}.meter{position:absolute;bottom:0;left:0;height:5px;background:var(--accent2);width:0}
+  .history{margin-top:16px}.history h3{margin:0 0 10px;font-size:15px}.hist{display:flex;flex-wrap:wrap;gap:7px}.pill{padding:7px 10px;border-radius:999px;background:#0b0e15;border:1px solid var(--line);font-size:12px;font-weight:800}.win{color:#6ff0d8}.lose{color:#ff7d94}
+  footer{text-align:center;color:#6f7788;font-size:12px;padding:30px 18px 45px}.note{margin-top:14px;color:#8e97a9}
+  @media(max-width:850px){.grid{grid-template-columns:1fr}.hero{align-items:start;flex-direction:column}.hero h1{font-size:34px}}
+</style>
+</head>
+<body>
+<header><div class="brand">NOVA <span>CASINO</span></div><div class="balance"><small>Баланс</small><span id="balance">10 000</span> 🪙</div></header>
+<main>
+  <section class="hero"><div><h1>Добро пожаловать</h1><p>Демо-казино на виртуальные монеты. Никаких реальных денег, платежей или вывода средств.</p></div><div class="demo">DEMO MODE</div></section>
+  <div class="tabs"><button class="tab active" data-tab="roulette">Roulette</button><button class="tab" data-tab="dice">Dice</button><button class="tab" data-tab="crash">Crash</button></div>
+
+  <section id="roulette" class="game grid">
+    <div class="card"><div class="game-title">Европейская рулетка</div><div class="sub">Выбери цвет и сделай ставку</div><div class="wheel-wrap"><div class="wheel"><div class="pointer"></div></div></div><div id="rouletteResult" class="result">Сделай ставку</div></div>
+    <div class="card controls"><div><div class="game-title">Ставка</div><div class="sub">Виртуальные монеты</div></div><input id="rouletteBet" class="input" type="number" min="1" value="100"><div class="choices"><div class="choice active" data-color="red">🔴 Красное<br><span class="sub">×2</span></div><div class="choice" data-color="black">⚫ Чёрное<br><span class="sub">×2</span></div><div class="choice" data-color="green">🟢 0<br><span class="sub">×14</span></div></div><button id="spin" class="btn btn-primary">Крутить рулетку</button><button id="reset" class="btn btn-secondary">Сбросить баланс</button><div class="note">Результат генерируется случайно только для игровой демонстрации.</div></div>
+  </section>
+
+  <section id="dice" class="game grid hidden">
+    <div class="card"><div class="game-title">Dice</div><div class="sub">Угадай, будет ли число выше выбранного значения</div><div class="result big" id="diceNumber">—</div><div style="margin-top:12px"><input id="diceRange" type="range" min="10" max="90" value="50" style="width:100%"><div style="display:flex;justify-content:space-between;margin-top:7px;color:var(--muted);font-size:12px"><span>10</span><b id="rangeValue">50</b><span>90</span></div></div></div>
+    <div class="card controls"><div><div class="game-title">Ставка</div><div class="sub">Чем выше риск, тем выше потенциальный множитель</div></div><input id="diceBet" class="input" type="number" min="1" value="100"><div class="row"><button id="less" class="btn btn-secondary" style="width:50%">Число ниже</button><button id="more" class="btn btn-primary" style="width:50%">Число выше</button></div><div id="diceResult" class="result">Выбери направление</div></div>
+  </section>
+
+  <section id="crash" class="game grid hidden">
+    <div class="card"><div class="game-title">Crash</div><div class="sub">Кэшаут до того, как коэффициент упадёт</div><div class="crash-box"><div class="status" id="crashStatus">Готово</div><div class="mult" id="mult">1.00×</div><div class="meter" id="meter"></div></div></div>
+    <div class="card controls"><div><div class="game-title">Ставка</div><div class="sub">Запусти раунд и забери выигрыш</div></div><input id="crashBet" class="input" type="number" min="1" value="100"><div class="row"><button id="startCrash" class="btn btn-primary" style="width:50%">Старт</button><button id="cashout" class="btn btn-green" style="width:50%" disabled>Забрать</button></div><div id="crashResult" class="result">Раунд не запущен</div></div>
+  </section>
+
+  <section class="card history"><h3>История</h3><div id="history" class="hist"><span class="pill">Игра запущена</span></div></section>
+</main>
+<footer>© NOVA Casino Demo · Только виртуальные монеты · Не является азартной игрой на реальные деньги</footer>
+<script>
+const moneyFmt=n=>new Intl.NumberFormat('ru-RU').format(Math.max(0,Math.floor(n)));
+let balance=Number(localStorage.getItem('novaBalance')||10000);
+let history=JSON.parse(localStorage.getItem('novaHistory')||'[]');
+let rouletteColor='red'; let crashTimer=null, crashValue=1, crashPoint=0, crashActive=false;
+const balanceEl=document.getElementById('balance');
+function save(){localStorage.setItem('novaBalance',balance);localStorage.setItem('novaHistory',JSON.stringify(history.slice(-20)));balanceEl.textContent=moneyFmt(balance);}
+function log(text,win){history.push({text,win}); renderHistory(); save();}
+function renderHistory(){const el=document.getElementById('history');el.innerHTML='';if(!history.length){el.innerHTML='<span class="pill">Пока пусто</span>';return}history.slice().reverse().forEach(h=>{let s=document.createElement('span');s.className='pill '+(h.win?'win':'lose');s.textContent=h.text;el.appendChild(s)})}
+function validBet(v){v=Math.floor(Number(v));return Number.isFinite(v)&&v>0&&v<=balance?v:0}
+
+document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));t.classList.add('active');document.querySelectorAll('.game').forEach(x=>x.classList.add('hidden'));document.getElementById(t.dataset.tab).classList.remove('hidden')});
+
+document.querySelectorAll('.choice').forEach(c=>c.onclick=()=>{document.querySelectorAll('.choice').forEach(x=>x.classList.remove('active'));c.classList.add('active');rouletteColor=c.dataset.color});
+
+document.getElementById('spin').onclick=()=>{const bet=validBet(document.getElementById('rouletteBet').value);if(!bet)return alert('Недостаточно виртуальных монет или неверная ставка.');balance-=bet;const n=Math.floor(Math.random()*37), color=n===0?'green':(n%2?'red':'black');let payout=0;if(color===rouletteColor)payout=rouletteColor==='green'?bet*14:bet*2;balance+=payout;const res=document.getElementById('rouletteResult');res.innerHTML=`Выпало <b>${n}</b> — ${color==='green'?'🟢 Зелёное':color==='red'?'🔴 Красное':'⚫ Чёрное'} ${payout?'· Выигрыш '+moneyFmt(payout)+' 🪙':'· Проигрыш'}`;log(`Roulette: ${n} ${payout?'+':'-'}${moneyFmt(payout||bet)} 🪙`,!!payout);save()};
+
+document.getElementById('reset').onclick=()=>{balance=10000;history=[];save();renderHistory();document.getElementById('rouletteResult').textContent='Баланс сброшен'};
+
+const range=document.getElementById('diceRange');range.oninput=()=>document.getElementById('rangeValue').textContent=range.value;
+function playDice(direction){const bet=validBet(document.getElementById('diceBet').value);if(!bet)return alert('Недостаточно виртуальных монет или неверная ставка.');const target=Number(range.value);const roll=Math.floor(Math.random()*100)+1;balance-=bet;let win=direction==='more'?roll>target:roll<target;let chance=direction==='more'?(100-target)/100:target/100;let mult=Math.max(1.01,0.96/chance);let payout=win?Math.floor(bet*mult):0;balance+=payout;document.getElementById('diceNumber').textContent=roll;document.getElementById('diceResult').innerHTML=win?`Выигрыш: <b>${moneyFmt(payout)} 🪙</b> (${mult.toFixed(2)}×)`:`Проигрыш: ${moneyFmt(bet)} 🪙`;log(`Dice: ${roll} ${win?'+':'-'}${moneyFmt(win?payout:bet)} 🪙`,win);save()}
+document.getElementById('less').onclick=()=>playDice('less');document.getElementById('more').onclick=()=>playDice('more');
+
+function setCrashUI(status,val){document.getElementById('crashStatus').textContent=status;document.getElementById('mult').textContent=val.toFixed(2)+'×';document.getElementById('meter').style.width=Math.min(100,(val-1)*20)+'%'}
+document.getElementById('startCrash').onclick=()=>{if(crashActive)return;const bet=validBet(document.getElementById('crashBet').value);if(!bet)return alert('Недостаточно виртуальных монет или неверная ставка.');balance-=bet;save();crashActive=true;crashValue=1;crashPoint=+(1.1+Math.pow(Math.random(),2.1)*8).toFixed(2);document.getElementById('startCrash').disabled=true;document.getElementById('cashout').disabled=false;document.getElementById('crashResult').textContent='Раунд идёт...';setCrashUI('Идёт',crashValue);crashTimer=setInterval(()=>{crashValue=+(crashValue+0.03+crashValue*0.008).toFixed(2);setCrashUI('Идёт',crashValue);if(crashValue>=crashPoint){clearInterval(crashTimer);crashActive=false;document.getElementById('cashout').disabled=true;document.getElementById('startCrash').disabled=false;document.getElementById('crashResult').textContent=`CRASH на ${crashPoint.toFixed(2)}× — ставка проиграла`;log(`Crash: ${crashPoint.toFixed(2)}× -${moneyFmt(bet)} 🪙`,false)}} ,70)};
+document.getElementById('cashout').onclick=()=>{if(!crashActive)return;clearInterval(crashTimer);crashActive=false;const bet=Number(document.getElementById('crashBet').value);const payout=Math.floor(bet*crashValue);balance+=payout;document.getElementById('cashout').disabled=true;document.getElementById('startCrash').disabled=false;document.getElementById('crashResult').innerHTML=`Забрано на <b>${crashValue.toFixed(2)}×</b> · ${moneyFmt(payout)} 🪙`;setCrashUI('Вы забрали',crashValue);log(`Crash: ${crashValue.toFixed(2)}× +${moneyFmt(payout)} 🪙`,true);save()};
+renderHistory();save();
+</script>
+</body>
+</html>
